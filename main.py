@@ -7,10 +7,11 @@ from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from sqlalchemy.sql import func
 from fastapi import Cookie, Response, Depends
 from itsdangerous import URLSafeSerializer, BadSignature
+from rag_router import router as rag_router
 
 
 # --- Настройки БД ---
-DATABASE_URL = "***"
+DATABASE_URL = "postgresql://appuser:strong_password@127.0.0.1:5432/appdb"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 Base = declarative_base()
@@ -54,9 +55,10 @@ class ItemResponse(BaseModel):
 
 # --- FastAPI ---
 app = FastAPI()
+app.include_router(rag_router)
 
 # --- Простая авторизация по никнейму ---
-SECRET_KEY = "***"
+SECRET_KEY = "QDC_0dAM-HbaF_jNK8I_8PtKI30UwDakSSq-SleBwUG0zPkd6UJJeqhds6Q5ORpMfxk"
 serializer = URLSafeSerializer(SECRET_KEY, salt="nickname")
 
 
